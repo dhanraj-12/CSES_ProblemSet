@@ -206,19 +206,26 @@ int32_t dj() {
     while(t--) solve();
     return 0;
 }
-
 void solve() {
-    ll n;
-    cin >> n;
-    vi dp(n+1);
-    dp[0] = 1;
-    for(ll i = 1; i<=n; i++) {
-        for(ll j = 1; j<=6; j++) {
-            if(j <= i) {
-                dp[i]  = (dp[i] + dp[i-j]) % MOD;
+    ll n,k;
+    cin >> n >> k;
+    vi v(n);
+    inputv(v,n);
+    vi dp(k+1,1e9);
+    dp[0] = 0;
+ 
+    for(ll i = 1; i<=k; i++) {
+        for(ll j = 0; j<n; j++) {
+            if(v[j] <= i) {
+                dp[i] = min((dp[i-v[j]])+1,dp[i]);
             }
         }
     }
  
-    cout(dp[n]);
+    if(dp[k] == 1e9) {
+        cout(-1);
+        return;
+    }
+ 
+    cout(dp[k]);
 }
