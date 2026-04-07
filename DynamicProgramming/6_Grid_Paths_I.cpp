@@ -219,32 +219,41 @@ void solve() {
 
     debug(matrix)
 
-    vector<vi> dp(n,vi(n,0));
+    // vector<vi> dp(n,vi(n,0));
 
+
+    vi previouState(n,0);
     for(ll i = 0; i<n; i++) {
         if(matrix[0][i] != '*'){
-            dp[0][i] = 1;
+            previouState[i] = 1;
         }else {
             break;
         }
     }
+    debug(previouState);
+    // for(ll i = 0; i<n; i++) {
+    //     if(matrix[i][0] != '*'){
+    //         dp[i][0] = 1;
+    //     }else {
+    //         break;
+    //     }
+    // }
 
-    for(ll i = 0; i<n; i++) {
-        if(matrix[i][0] != '*'){
-            dp[i][0] = 1;
-        }else {
-            break;
-        }
-    }
-
-    
+    ll x = (matrix[0][0] == '*');
     for(ll i=  1; i<n; i++) {
+        vi currState(n,0);
+        if(matrix[i][0] != '*' && !x) {
+            currState[0] = 1;
+        }else {
+            x = 1;
+        }
         for(ll j = 1; j<n; j++) {
             if(matrix[i][j] != '*') {
-                dp[i][j] = (dp[i][j-1] + dp[i-1][j])%MOD;
+                currState[j] = (currState[j-1] + previouState[j])%MOD;
             }
         }
+        previouState = currState;
     }
 
-    cout(dp[n-1][n-1]);
+    cout(previouState[n-1]);
 }

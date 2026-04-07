@@ -6,7 +6,7 @@ using namespace std;
 #define dj main
 #define all(x) (x).begin(), (x).end()
 #define cout(x) cout << x << "\n";
-const ll MOD = 1e9+7;
+ll MOD = 1e9+7;
 
 #ifdef ONLINE_JUDGE
 #define debug(x)
@@ -17,9 +17,7 @@ const ll MOD = 1e9+7;
 void _print(ll t) {cerr << t;}
 void _print(string t) {cerr << t;}
 void _print(char t) {cerr << t;}
-void _print(double t) {cerr << t;}backward, dp[j - a[i]] is from the previous iteration (i-1)
-
-So each item is used on
+void _print(double t) {cerr << t;}
 template <class T, class V> void _print(pair <T, V> p);
 template <class T> void _print(vector <T> v);
 template <class T> void _print(set <T> v);
@@ -208,33 +206,58 @@ int32_t dj() {
     while(t--) solve();
     return 0;
 }
-/**
- *  First Method
- * 
- void solve() {
-    ll n,x;
-    cin >> n >> x;
+
+
+ll valid(ll x,ll m) {
+    return x >= 1 && x <= m;
+}
+void solve() {
+    ll n,m;
+    cin >> n >> m;   
     vi v(n);
     inputv(v,n);
+    
+    // dp[i][k] --> number of prefix of lenght i such that the last element is k;
 
+    // transistion -->> dp[i][k] = dp[i-1][k-1] + dp[i-1][k] + dp[i-1][k+1];
 
-    vi dp(x+1,0); // dp[i] --> number of ordered way that sum of coin can form i 
-    dp[0] = 1;
-   for (int i = 0; i < n; i++) {
-        ll coin_value = v[i];
-        
-        for (ll j = coin_value; j <= x; j++) {
-            dp[j] = (dp[j] + dp[j - coin_value]) % MOD;
+    vector<vi> dp(n+1,vi(m+1));
+
+    // base Case
+
+    for(ll i = 1; i<=m; i++) {
+        if(v[0] == 0 || v[0] == i) {
+            dp[1][i] = 1;
         }
     }
 
-    cout(dp[x]);
-}
+    for(ll i = 2; i<=n; i++) {
+        for(ll k = 1; k<=m; k++) {
+            if(v[i-1] != 0 && v[i-1] != k) {
+                dp[i][k] = 0;
+                continue;;
+            }
 
-*/
+            
+
+            for(ll prev = k-1; prev <= k+1; prev++) {
+                
+                if(!valid(prev,m)) {
+                    continue;
+                }
+         
+                dp[i][k] = (dp[i-1][prev] + dp[i][k]) % MOD;
+            }
+        }
+    }
 
 
+    // final answer
+    ll ans = 0;
+    for(ll i = 1; i<=m; i++) {
+        ans = (ans + dp[n][i])%MOD;
+    }
 
-void solve() {
+    cout(ans);
     
 }

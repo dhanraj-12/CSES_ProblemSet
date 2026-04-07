@@ -6,7 +6,7 @@ using namespace std;
 #define dj main
 #define all(x) (x).begin(), (x).end()
 #define cout(x) cout << x << "\n";
-const ll MOD = 1e9+7;
+ll MOD = 1e9+7;
 
 #ifdef ONLINE_JUDGE
 #define debug(x)
@@ -17,9 +17,7 @@ const ll MOD = 1e9+7;
 void _print(ll t) {cerr << t;}
 void _print(string t) {cerr << t;}
 void _print(char t) {cerr << t;}
-void _print(double t) {cerr << t;}backward, dp[j - a[i]] is from the previous iteration (i-1)
-
-So each item is used on
+void _print(double t) {cerr << t;}
 template <class T, class V> void _print(pair <T, V> p);
 template <class T> void _print(vector <T> v);
 template <class T> void _print(set <T> v);
@@ -204,37 +202,38 @@ int32_t dj() {
         freopen("./out.txt", "w", stdout);
         freopen("./Error.text", "w", stderr);
     #endif
-    ll t = 1;
+    ll t = 1; 
     while(t--) solve();
     return 0;
 }
-/**
- *  First Method
- * 
- void solve() {
+
+void solve() {
     ll n,x;
     cin >> n >> x;
-    vi v(n);
-    inputv(v,n);
+    vi a(n);
+    vi b(n);
+    inputv(a,n);
+    inputv(b,n);
+    
+    vi dp(x+1,0); // dp[i] --> maximum number of pages after can be buyed with money i
 
-
-    vi dp(x+1,0); // dp[i] --> number of ordered way that sum of coin can form i 
-    dp[0] = 1;
-   for (int i = 0; i < n; i++) {
-        ll coin_value = v[i];
-        
-        for (ll j = coin_value; j <= x; j++) {
-            dp[j] = (dp[j] + dp[j - coin_value]) % MOD;
+    for(ll i = 0; i<n; i++) {
+        for(ll j = x; j>=a[i]; j--) {
+            dp[j] = max(dp[j],dp[j-a[i]]+b[i]);            
         }
     }
 
+
+    debug(dp);
+    debug(x);
+    debug(dp[x]);
     cout(dp[x]);
-}
-
-*/
-
-
-
-void solve() {
     
+    /**
+     
+    Time Complexity-->  number of State * average time complexoty per state
+
+    O(n*x) * O(1)
+     */
+
 }
